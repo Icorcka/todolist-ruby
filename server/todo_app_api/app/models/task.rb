@@ -1,17 +1,16 @@
 require 'json'
 
 class Task
-  attr_accessor :id, :title, :user_id
+  attr_accessor :id, :title
 
   def initialize(attributes = {})
     @id = attributes[:id]
     @title = attributes[:title]
-    @user_id = attributes[:user_id]
   end
 
   def save
     self.id ||= SecureRandom.uuid
-    data = { id: id, title: title, user_id: user_id }
+    data = { id: id, title: title }
     File.write("data/tasks/#{id}.json", data.to_json)
   end
 
@@ -20,7 +19,7 @@ class Task
     return nil unless File.exist?(file_path)
 
     data = JSON.parse(File.read(file_path))
-    new(id: data['id'], title: data['title'], user_id: data['user_id'])
+    new(id: data['id'], title: data['title'])
   end
 
   def self.destroy(id)
